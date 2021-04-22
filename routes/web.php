@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CoffeeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('coffee.index');
 });
+
+Route::get('/coffee', [CoffeeController::class, 'index'])->name('coffee.index');
+Route::get('/coffee/create', [CoffeeController::class, 'create'])->name('coffee.create');
+Route::post('/coffee', [CoffeeController::class, 'store'])->name('coffee.store');
+Route::get('/coffee/{coffee}', [CoffeeController::class, 'edit'])->name('coffee.edit');
+Route::put('/coffee/{coffee}', [CoffeeController::class, 'update'])->name('coffee.update');
+Route::delete('/coffee/{coffee}', [CoffeeController::class, 'destroy'])->name('coffee.delete');
