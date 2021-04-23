@@ -17,7 +17,7 @@
         @foreach($coffees as $coffee)
             <div class="col-3">
                 <div class="card">
-                    <img class="card-img-top img-thumbnail" src="{{ asset('storage/' . $coffee->image) }}" alt="Card image cap">
+                    <img class="card-img-top img-thumbnail" src="{{ asset($coffee->image) }}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{ $coffee->title }}</h5>
                         <p class="card-text">{{ $coffee->price }}</p>

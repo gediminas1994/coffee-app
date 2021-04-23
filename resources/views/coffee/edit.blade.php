@@ -30,7 +30,7 @@
         </div>
         <div class="col-3">
             <h3>Current image</h3>
-            <img class="card-img-top img-thumbnail" src="{{ asset('storage/' . $coffee->image) }}" alt="Card image cap">
+            <img class="card-img-top img-thumbnail" src="{{ asset($coffee->image) }}" alt="Card image cap">
         </div>
     </div>
 @endsection
