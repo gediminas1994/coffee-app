@@ -2,6 +2,12 @@
 
 @section('content')
     <div class="row">
+        <div class="col">
+            <a href="{{ route('coffee.index') }}" class="btn btn-secondary float-right">Back</a>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-9">
             <form enctype="multipart/form-data" action="{{ route('coffee.update', $coffee) }}" method="POST">
                 @csrf

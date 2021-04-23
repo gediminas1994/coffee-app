@@ -3,12 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Coffee;
+use App\Services\CoffeeService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CoffeeController extends Controller
 {
+    /**
+     * @var CoffeeService
+     */
+    protected $coffeeService;
+
+    /**
+     * CoffeeController constructor.
+     * @param CoffeeService $coffeeService
+     */
+    public function __construct(CoffeeService  $coffeeService)
+    {
+        $this->coffeeService = $coffeeService;
+    }
+
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|View
      */
@@ -38,11 +53,10 @@ class CoffeeController extends Controller
         $validated = $request->validate([
             'title' => 'required|string',
             'price' => 'required|numeric',
-            'image' => 'required|file',
+            'image' => 'required|image',
         ]);
 
-        // save file
-        $imagePath = $request->file('image')->store('images', 'public');
+        $imagePath = $this->coffeeService->saveImageAndReturnFilePath($request);
 
         Coffee::create([
             'title' => $validated['title'],
@@ -78,9 +92,9 @@ class CoffeeController extends Controller
             'image' => 'file',
         ]);
 
-        // save file
         if ($request->has('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
+            $this->coffeeService->deleteOldImage($coffee);
+            $imagePath = $this->coffeeService->saveImageAndReturnFilePath($request);
         } else {
             $imagePath = $coffee->image;
         }
@@ -101,6 +115,7 @@ class CoffeeController extends Controller
      */
     public function destroy(Coffee $coffee)
     {
+        $this->coffeeService->deleteOldImage($coffee);
         $coffee->delete();
 
         return redirect()->route('coffee.index')

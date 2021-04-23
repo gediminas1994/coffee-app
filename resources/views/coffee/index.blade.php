@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+    @if(session()->has('success'))
+        <div class="alert alert-success">
+            {{ session()->get('success') }}
+        </div>
+    @endif
+
     <div class="row form-group">
         <div class="col-12">
             <a href="{{ route('coffee.create') }}" class="btn btn-primary btn-block">Add coffee</a>
