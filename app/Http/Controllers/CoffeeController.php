@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCoffeeRequest;
+use App\Http\Requests\UpdateCoffeeRequest;
 use App\Models\Coffee;
 use App\Services\CoffeeService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class CoffeeController extends Controller
 {
@@ -45,16 +46,12 @@ class CoffeeController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param StoreCoffeeRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreCoffeeRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string',
-            'price' => 'required|numeric',
-            'image' => 'required|image',
-        ]);
+        $validated = $request->validated();
 
         $imagePath = $this->coffeeService->saveImageAndReturnFilePath($request);
 
@@ -80,17 +77,13 @@ class CoffeeController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param UpdateCoffeeRequest $request
      * @param Coffee $coffee
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Coffee $coffee)
+    public function update(UpdateCoffeeRequest $request, Coffee $coffee)
     {
-        $validated = $request->validate([
-            'title' => 'required|string',
-            'price' => 'required|numeric',
-            'image' => 'file',
-        ]);
+        $validated = $request->validated();
 
         if ($request->has('image')) {
             $this->coffeeService->deleteOldImage($coffee);
